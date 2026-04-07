@@ -16,19 +16,22 @@ public class OsmImportService {
 
   private final RestTemplate restTemplate;
   private final BarRepository barRepository;
-  private static final String query = "[out:json][timeout:60][bbox:50.55,2.95,50.70,3.15];\r\n" + //
-      "(node[\"amenity\"=\"bar\"];\r\n" + //
-      "node[\"amenity\"=\"pub\"];\r\n" + //
-      "node[\"amenity\"=\"cafe\"];\r\n" + //
-      "node[\"amenity\"=\"restaurant\"]);\r\n" + //
+  private static final String query = "[out:json][timeout:60][bbox:50.55,2.95,50.70,3.15];\r\n" +
+      "(\r\n" +
+      "node[\"amenity\"=\"bar\"];\r\n" +
+      "node[\"amenity\"=\"pub\"];\r\n" +
+      "node[\"amenity\"=\"cafe\"];\r\n" +
+      "node[\"amenity\"=\"restaurant\"];\r\n" +
+      ");\r\n" +
       "out body;";
 
   public void importBars() {
 
-  Integer barCount = 0;
+    Integer barCount = 0;
 
     try {
-      OsmResponse response = restTemplate.postForObject("https://overpass-api.de/api/interpreter", query, OsmResponse.class);
+      OsmResponse response = restTemplate.postForObject("https://overpass-api.de/api/interpreter", query,
+          OsmResponse.class);
 
       for (OsmElement element : response.getElements()) {
         String name = element.getTags().getOrDefault("name", "Nom inconnu");
